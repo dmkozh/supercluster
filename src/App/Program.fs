@@ -51,6 +51,7 @@ type MissionOptions
         destination: string,
         image: string,
         oldImage: string option,
+        oldImageNodeCount: int,
         netdelayImage: string,
         postgresImage: string,
         nginxImage: string,
@@ -144,6 +145,11 @@ type MissionOptions
 
     [<Option('o', "old-image", HelpText = "Stellar-core image to use as old-image", Required = false)>]
     member self.OldImage = oldImage
+
+    [<Option("old-image-node-count",
+             HelpText = "Number of old image nodes for mixed image load mission",
+             Required = false)>]
+    member self.OldImageNodeCount = oldImageNodeCount
 
     [<Option("netdelay-image",
              HelpText = "'Netdelay' utility image to use",
@@ -353,6 +359,7 @@ let main argv =
                   destination = Destination("destination")
                   image = "stellar/stellar-core"
                   oldImage = None
+                  oldImageNodeCount = 1
                   netdelayImage = ""
                   postgresImage = ""
                   nginxImage = ""
@@ -450,6 +457,7 @@ let main argv =
                                destination = destination
                                image = mission.Image
                                oldImage = mission.OldImage
+                               oldImageNodeCount = mission.OldImageNodeCount
                                netdelayImage = mission.netdelayImage
                                postgresImage = mission.postgresImage
                                nginxImage = mission.nginxImage
