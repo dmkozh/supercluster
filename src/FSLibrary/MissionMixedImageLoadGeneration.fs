@@ -15,8 +15,6 @@ open StellarCoreHTTP
 let mixedImageLoadGeneration (context: MissionContext) =
     let oldNodeCount = context.oldImageNodeCount
     let newNodeCount = 3 - context.oldImageNodeCount
-    let oldKeys = Array.init oldNodeCount (fun _ -> KeyPair.Random())
-    let newKeys = Array.init newNodeCount (fun _ -> KeyPair.Random())
 
     let newImage = context.image
     let oldImage = GetOrDefault context.oldImage newImage
@@ -29,25 +27,23 @@ let mixedImageLoadGeneration (context: MissionContext) =
     let qSet =
         CoreSetQuorumListWithThreshold(([ CoreSetName oldName; CoreSetName newName ], 51))
 
-    let oldCoreSet : CoreSet =
-        { name = CoreSetName oldName
-          options =
-              { CoreSetOptions.GetDefault oldImage with
-                    invariantChecks = AllInvariantsExceptBucketConsistencyChecks
-                    dumpDatabase = false
-                    quorumSet = qSet }
-          keys = oldKeys
-          live = true }
+    let oldCoreSet =
+        MakeLiveCoreSet
+            oldName
+            { CoreSetOptions.GetDefault oldImage with
+                  nodeCount = oldNodeCount
+                  invariantChecks = AllInvariantsExceptBucketConsistencyChecks
+                  dumpDatabase = false
+                  quorumSet = qSet }
 
-    let newCoreSet : CoreSet =
-        { name = CoreSetName newName
-          options =
-              { CoreSetOptions.GetDefault newImage with
-                    invariantChecks = AllInvariantsExceptBucketConsistencyChecks
-                    dumpDatabase = false
-                    quorumSet = qSet }
-          keys = newKeys
-          live = true }
+    let newCoreSet =
+        MakeLiveCoreSet
+            newName
+            { CoreSetOptions.GetDefault newImage with
+                  nodeCount = newNodeCount
+                  invariantChecks = AllInvariantsExceptBucketConsistencyChecks
+                  dumpDatabase = false
+                  quorumSet = qSet }
 
     let context =
         { context with
