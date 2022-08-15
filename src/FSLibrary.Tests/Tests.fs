@@ -34,7 +34,6 @@ let ctx : MissionContext =
       destination = Destination(System.IO.Path.GetTempPath())
       image = "stellar/stellar-core"
       oldImage = None
-      oldImageNodeCount = 1
       netdelayImage = ""
       nginxImage = ""
       postgresImage = ""

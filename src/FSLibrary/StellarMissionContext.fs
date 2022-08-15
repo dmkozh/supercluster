@@ -28,7 +28,6 @@ type MissionContext =
       destination: Destination
       image: string
       oldImage: string option
-      oldImageNodeCount: int
       netdelayImage: string
       postgresImage: string
       nginxImage: string

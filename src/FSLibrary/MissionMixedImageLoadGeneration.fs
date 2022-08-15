@@ -12,9 +12,9 @@ open StellarStatefulSets
 open StellarSupercluster
 open StellarCoreHTTP
 
-let mixedImageLoadGeneration (context: MissionContext) =
-    let oldNodeCount = context.oldImageNodeCount
-    let newNodeCount = 3 - context.oldImageNodeCount
+let mixedImageLoadGeneration (oldImageNodeCount: int) (context: MissionContext) =
+    let oldNodeCount = oldImageNodeCount
+    let newNodeCount = 3 - oldImageNodeCount
 
     let newImage = context.image
     let oldImage = GetOrDefault context.oldImage newImage
@@ -70,3 +70,7 @@ let mixedImageLoadGeneration (context: MissionContext) =
 
             formation.RunLoadgen oldCoreSet context.GenerateAccountCreationLoad
             formation.RunLoadgen oldCoreSet context.GeneratePaymentLoad)
+
+let mixedImageLoadGenerationWithOldImageMajority (context: MissionContext) = mixedImageLoadGeneration 2 context
+
+let mixedImageLoadGenerationWithNewImageMajority (context: MissionContext) = mixedImageLoadGeneration 1 context
